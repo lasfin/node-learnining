@@ -1,0 +1,3 @@
+> use nodeblog
+> db.createCollection('posts');
+> db.createCollection('categories');
