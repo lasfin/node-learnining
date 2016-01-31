@@ -2,3 +2,5 @@
 > db.createCollection('posts');
 > db.createCollection('categories');
 > db.posts.insert({title:"Blog Post One", category:"Technology", author:"Brad",body:"This is the body", date:new Date()})
+> db.categories.insert({title: "Technology"});
+> db.categories.insert({title: "Sport"});
