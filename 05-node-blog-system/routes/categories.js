@@ -5,6 +5,19 @@ const router = express.Router();
 const mongo = require('mongodb');
 const db = require('monk')('localhost/nodeblog');
 
+router.get('/show/:category', (req, res, next) => {
+    let db = req.db;
+    let posts = db.get('posts');
+    posts.find({
+        category: req.params.category
+    }, {}, function(err, posts) {
+        res.render('index', {
+            'title': req.params.category,
+            posts
+        })
+    });
+});
+
 
 router.get('/add', (req, res, next) => {
     res.render('addcategory', {
@@ -40,7 +53,6 @@ router.post('/add', (req, res, next) => {
             }
         })
     }
-
 
 });
 

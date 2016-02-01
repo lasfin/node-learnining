@@ -33,7 +33,7 @@ router.post('/add', (req, res, next) => {
         let mainImageExt = req.files.mainimage.extension;
         let mainImageSize = req.files.mainimage.size;
     } else {
-        mainImageName = 'noimage.jpg';
+        mainImageName = 'noimage.png';
     }
 
     // form validation
