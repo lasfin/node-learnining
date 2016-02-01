@@ -1,30 +1,28 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
+'use strict';
 
-var expressValidator = require('express-validator');
+const express = require('express');
+const path = require('path');
+const favicon = require('serve-favicon');
+const logger = require('morgan');
 
-var cookieParser = require('cookie-parser');
+const expressValidator = require('express-validator');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
 
-var session = require('express-session');
+const bodyParser = require('body-parser');
+const mongo = require('mongodb');
+const db = require('monk')('localhost/nodeblog');
+const multer = require('multer');
+const flash = require('connect-flash');
 
-var bodyParser = require('body-parser');
-var mongo = require('mongodb');
-var db = require('monk')('localhost/nodeblog');
-var multer = require('multer');
-var flash = require('connect-flash');
-
-var routes = require('./routes/index');
-var posts = require('./routes/posts');
-
-var app = express();
+const routes = require('./routes/index');
+const posts = require('./routes/posts');
+const app = express();
 
 app.locals.moment = require('moment');
 
-app.locals.truncateText = function(text, length){
-    var truncateText = text.substring(0,length);
-    return truncateText;
+app.locals.truncateText = (text, length) => {
+    return text.substring(0,length);
 };
 
 // view engine setup
@@ -51,7 +49,7 @@ app.use(session({
 // Validator
 app.use(expressValidator({
     errorFormatter: function(param, msg, value) {
-        var namespace = param.split('.'),
+        let namespace = param.split('.'),
             root    = namespace.shift(),
             formParam = root;
 
@@ -70,13 +68,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 app.use(flash());
-app.use(function (req, res, next) {
+app.use((req, res, next) => {
     res.locals.messages = require('express-messages')(req, res);
     next();
 });
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
     req.db =  db;
     next();
 });
@@ -85,8 +83,8 @@ app.use('/', routes);
 app.use('/posts', posts);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
-    var err = new Error('Not Found');
+app.use((req, res, next) => {
+    let err = new Error('Not Found');
     err.status = 404;
     next(err);
 });

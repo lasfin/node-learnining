@@ -1,36 +1,39 @@
-var express = require('express');
-var router = express.Router();
-var mongo = require('mongodb');
-var db = require('monk')('localhost/nodeblog');
+'use strict';
+
+const express = require('express');
+const router = express.Router();
+const mongo = require('mongodb');
+const db = require('monk')('localhost/nodeblog');
 
 
-router.get('/add', function(req, res, next) {
-    var categories = db.get('categories');
+router.get('/add', (req, res, next) => {
+    let categories = db.get('categories');
     categories.find({}, {}, function(err, categories) {
         res.render('addpost', {
             title: 'Add post',
-            categories: categories
+            categories
         });
     });
 });
 
-router.post('/add', function(req, res, next){
+router.post('/add', (req, res, next) => {
    // get form values
-    var title = req.body.title;
-    var category = req.body.category;
-    var body = req.body.body;
-    var author = req.body.author;
-    var date = new Date();
+    let title = req.body.title;
+    let category = req.body.category;
+    let body = req.body.body;
+    let author = req.body.author;
+    let date = new Date();
+    let mainImageName;
 
     if (req.files.mainimage) {
-        var mainImageOriginalName = req.files.mainimage.originalname;
-        var mainImageName = req.files.mainimage.name;
-        var mainImageMine = req.files.mainimage.mimetype;
-        var mainImagePath = req.files.mainimage.path;
-        var mainImageExt = req.files.mainimage.extension;
-        var mainImageSize = req.files.mainimage.size;
+        mainImageName = req.files.mainimage.name;
+        let mainImageOriginalName = req.files.mainimage.originalname;
+        let mainImageMine = req.files.mainimage.mimetype;
+        let mainImagePath = req.files.mainimage.path;
+        let mainImageExt = req.files.mainimage.extension;
+        let mainImageSize = req.files.mainimage.size;
     } else {
-        var mainImageName = 'noimage.jpg';
+        mainImageName = 'noimage.jpg';
     }
 
     // form validation
@@ -42,21 +45,21 @@ router.post('/add', function(req, res, next){
 
     if (errors) {
         res.render({
-            errors: erros,
-            title: title,
-            body: body
+            errors,
+            title,
+            body
         })
     } else {
-        var posts = db.get('posts');
+        let posts = db.get('posts');
         // submit to db
         posts.insert({
-            title: title,
-            body: body,
-            category: category,
-            date: date,
-            author: author,
+            title,
+            body,
+            category,
+            date,
+            author,
             mainimage: mainImageName
-        }, function(err, post) {
+        }, (err, post) => {
             if (err) {
                 res.send('There was an issue submitting the post')
             } else {
