@@ -44,7 +44,7 @@ router.post('/add', (req, res, next) => {
     var errors = req.validationErrors();
 
     if (errors) {
-        res.render({
+        res.render('addpost', {
             errors,
             title,
             body
