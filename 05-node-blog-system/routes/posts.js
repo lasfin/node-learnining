@@ -5,10 +5,20 @@ const router = express.Router();
 const mongo = require('mongodb');
 const db = require('monk')('localhost/nodeblog');
 
+router.get('/show/:id', (req, res, next) =>{
+    let posts = db.get('posts');
+    posts.findById(req.params.id, (err, post) => {
+        res.render('showpost', {
+            post,
+            errors: []
+        })
+    })
+});
+
 
 router.get('/add', (req, res, next) => {
     let categories = db.get('categories');
-    categories.find({}, {}, function(err, categories) {
+    categories.find({}, {}, (err, categories) => {
         res.render('addpost', {
             title: 'Add post',
             categories
