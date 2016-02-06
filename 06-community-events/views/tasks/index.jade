@@ -1,0 +1,20 @@
+extends ../../layouts/default
+
+block head
+    title View tasks
+
+block body
+    div.row
+        div.col-sm-8
+            div.page-header
+                h1 View Tasks
+            ul.tasks
+                each task, i in data
+                    li
+                        strong #{task.name}
+                        | posted by #{task.username}
+                        p #{task.description}
+                        a(href='/tasks/show/#{task._id}', class='btn btn-default') Read more
+            div.col-sm-4
+                div.page-header
+                    h1 Sidebar
