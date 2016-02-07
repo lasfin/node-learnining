@@ -35,7 +35,9 @@ exports = module.exports = function(app, passport) {
   app.get('/contact/', require('./views/contact/index').init);
   app.post('/contact/', require('./views/contact/index').sendMessage);
   app.get('/tasks/', require('./views/tasks/index').find);
-
+  app.get('/tasks/show/:id', require('./views/tasks/index').read);
+  app.get('/tasks/add', require('./views/tasks/index').add);
+  app.post('/tasks', require('./views/tasks/index').create);
 
 
   //sign up

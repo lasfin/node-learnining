@@ -33,3 +33,72 @@ exports.find = function(req, res, next){
         }
     });
 };
+
+
+exports.read = function(req, res, next){
+    req.app.db.models.Task.findById(req.params.id).exec(function(err, task) {
+        if (err) {
+            return next(err);
+        }
+
+        if (req.xhr) {
+            res.send(task);
+        }
+        else {
+            res.render('tasks/details', {
+                task: task
+            });
+        }
+    });
+};
+
+
+exports.add = function(req, res, next){
+    if (!req.isAuthenticated()) {
+        req.flash('error', 'You are not logged in');
+        res.location('/tasks');
+        res.redirect('/tasks');
+    }
+    res.render('tasks/add');
+};
+
+
+exports.create = function(req, res, next){
+    var workflow = req.app.utility.workflow(req, res);
+
+    workflow.on('validate', function() {
+        if (!req.body.name) {
+            workflow.outcome.errors.push('Please enter a name.');
+            return workflow.emit('response');
+        }
+
+        workflow.emit('createTask');
+    });
+
+
+    workflow.on('createTask', function() {
+        var fieldsToSet = {
+            name: req.body.name,
+            description: req.body.description,
+            date: req.body.date,
+            startTime: req.body.startTime,
+            endTime: req.body.endTime,
+            username: req.user.username,
+            search:[
+                req.body.name
+            ]
+        };
+        req.app.db.models.Task.create(fieldsToSet, function(err, event) {
+            if (err) {
+                return workflow.emit('exception', err);
+            }
+
+            workflow.outcome.record = event;
+            req.flash('success', 'Task Added');
+            res.location('/tasks');
+            res.redirect('/tasks');
+        });
+    });
+
+    workflow.emit('validate');
+};

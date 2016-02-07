@@ -26,6 +26,12 @@ html
             li: a(href='/contact/') Contact
           ul.nav.navbar-nav.navbar-right
             if user && user.username
+              li: a(href='#/mytasks')
+                i.fa.fa-calendar
+                |  My tasks
+              li: a(href='/tasks/add')
+                i.fa.fa-plus
+                |  Add task
               li: a(href='#{user.defaultReturnUrl}')
                 i.fa.fa-user
                 |  #{user.username}
@@ -36,6 +42,7 @@ html
 
     div.page
       div.container
+        != messages()
         block body
 
     div.footer
