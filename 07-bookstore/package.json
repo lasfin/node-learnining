@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "adaro": "^0.1.10",
+    "connect-flash": "^0.1.1",
     "construx": "^1.0.0",
     "construx-copier": "^1.0.0",
     "construx-dustjs-i18n": "^1.0.1",
@@ -20,7 +21,10 @@
     "engine-munger": "^0.2.8",
     "eslint": "^1.10.3",
     "express": "^4.12.2",
+    "express-messages": "^1.0.0",
     "kraken-js": "^1.0.3",
+    "mongodb": "^2.1.6",
+    "mongoose": "^4.4.2",
     "requirejs": "^2.1.22"
   },
   "devDependencies": {
